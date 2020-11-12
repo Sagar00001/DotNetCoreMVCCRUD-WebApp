@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Asp.NetCoreMVCCRUD.project.Models.Employee>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Emnployee details</h1>
+
+<p>
+    <a asp-action="AddEmployee" class="btn btn-outline-success"><i class="far fa-plus-square"></i>Create new</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Designation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Joining_Date)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Designation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Joining_Date)
+            </td>
+            <td>
+                <a asp-action="UpdateEmployee" asp-route-id="@item.ID" class="btn btn-outline-primary"><i class="fa fa-marker fa-lg"></i>Edit</a>
+               
+                <a asp-action="DelEmployee" asp-route-id="@item.ID" class="btn btn-outline-danger" onclick="return confirm('Are you sure?')"><i class="fa fa-trash-alt fa-lg"></i>Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
