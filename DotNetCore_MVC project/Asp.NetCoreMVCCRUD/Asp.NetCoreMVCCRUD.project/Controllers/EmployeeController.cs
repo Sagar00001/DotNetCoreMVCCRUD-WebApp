@@ -7,22 +7,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Asp.NetCoreMVCCRUD.project.Models;
 using Asp.NetCoreMVCCRUD.project.Repository;
+using Microsoft.Extensions.Logging;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Asp.NetCoreMVCCRUD.project.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeRepository employeeRepository;
+        private readonly ILogger<EmployeeController> _logger;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EmployeeController(IEmployeeRepository _employeeRepository)
+        public EmployeeController(ILogger<EmployeeController> logger, IUnitOfWork unitOfWork)
         {
-            employeeRepository = _employeeRepository;
+            _logger = logger;
+            _unitOfWork = unitOfWork;
         }
 
         // GET: Employee
         public async Task<IActionResult> GetAllEmployees()
         {
-            var emp = await employeeRepository.GetAllEmployees();
+            var emp = await _unitOfWork.employeeRepository.GetAllEmployees();
             return View(emp);
         }
 
@@ -36,7 +40,8 @@ namespace Asp.NetCoreMVCCRUD.project.Controllers
                     return NotFound();
                 }
 
-                var employee = await employeeRepository.GetEmployeeById(id);
+                var employee = await _unitOfWork.employeeRepository.GetEmployeeById(id);
+
                 if (employee == null)
                 {
                     return NotFound();
@@ -64,28 +69,38 @@ namespace Asp.NetCoreMVCCRUD.project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddEmployee([Bind("ID,Name,Designation,Joining_Date")] Employee employee)
         {
-            if (ModelState.IsValid)
+            try
             {
-                await employeeRepository.AddEmployeeAsync(employee);
+                if (ModelState.IsValid)
+                {
+                    await _unitOfWork.employeeRepository.AddEmployeeAsync(employee);
+                    _unitOfWork.Commit();
+                    return RedirectToAction(nameof(GetAllEmployees));
+                }
+                return View(employee);
+            }
+            catch(Exception)
+            {
+                _unitOfWork.Rollback();
                 return RedirectToAction(nameof(GetAllEmployees));
             }
-            return View(employee);
+            
         }
 
         // GET: Employee/Edit/5
         public async Task<IActionResult> UpdateEmployee(int? id)
         {
-            if (id == null)
+            try
             {
-                return NotFound();
+                var employee = await _unitOfWork.employeeRepository.GetEmployeeById(id);
+                //_unitOfWork.Commit();
+                return View(employee);
             }
-
-            var employee = await employeeRepository.GetEmployeeById(id);
-            if (employee == null)
+            catch(Exception e)
             {
-                return NotFound();
+                //_unitOfWork.Rollback();
+                throw e;
             }
-            return View(employee);
         }
 
         // POST: Employee/Edit/5
@@ -104,11 +119,13 @@ namespace Asp.NetCoreMVCCRUD.project.Controllers
             {
                 try
                 {
-                    await employeeRepository.UpdateEmployee(employee);
+                    await _unitOfWork.employeeRepository.UpdateEmployee(employee);
+                    _unitOfWork.Commit();
                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
+                    _unitOfWork.Rollback();
                     if (!EmployeeExists(employee.ID))
                     {
                         return NotFound();
@@ -126,19 +143,26 @@ namespace Asp.NetCoreMVCCRUD.project.Controllers
         // GET: Employee/Delete/5
         public async Task<IActionResult> DelEmployee(int? id)
         {
+            try
+            {
+                await _unitOfWork.employeeRepository.DeleteEmployee(id);
+                _unitOfWork.Commit();
 
-
-           await employeeRepository.DeleteEmployee(id);
-
-
-            return RedirectToAction(nameof(GetAllEmployees));
+                return RedirectToAction(nameof(GetAllEmployees));
+            }
+            catch (Exception)
+            {
+                _unitOfWork.Rollback();
+                return RedirectToAction(nameof(GetAllEmployees));
+            }
+           
         }
 
       
 
         private bool EmployeeExists(int id)
         {
-            var emp = employeeRepository.GetEmployeeById(id);
+            var emp = _unitOfWork.employeeRepository.GetEmployeeById(id);
 
             if (emp != null)
                 return true;

@@ -28,7 +28,10 @@ namespace Asp.NetCoreMVCCRUD.project
         {
             services.AddControllersWithViews();
             services.AddDbContext<EmployeeContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ConnectionString")));
+
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

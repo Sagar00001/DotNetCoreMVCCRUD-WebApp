@@ -8952,11 +8952,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\sagar\\Desktop\\DotNetCore_MVC project\\Asp.NetCoreMVCCRUD\\Asp.NetCoreMVCCRUD.project\\Asp.NetCoreMVCCRUD.project.csproj",
+      "projectUniqueName": "C:\\Users\\sagar\\Desktop\\DotNetCoreMVCCRUD-WebApp\\DotNetCore_MVC project\\Asp.NetCoreMVCCRUD\\Asp.NetCoreMVCCRUD.project\\Asp.NetCoreMVCCRUD.project.csproj",
       "projectName": "Asp.NetCoreMVCCRUD.project",
-      "projectPath": "C:\\Users\\sagar\\Desktop\\DotNetCore_MVC project\\Asp.NetCoreMVCCRUD\\Asp.NetCoreMVCCRUD.project\\Asp.NetCoreMVCCRUD.project.csproj",
+      "projectPath": "C:\\Users\\sagar\\Desktop\\DotNetCoreMVCCRUD-WebApp\\DotNetCore_MVC project\\Asp.NetCoreMVCCRUD\\Asp.NetCoreMVCCRUD.project\\Asp.NetCoreMVCCRUD.project.csproj",
       "packagesPath": "C:\\Users\\sagar\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\sagar\\Desktop\\DotNetCore_MVC project\\Asp.NetCoreMVCCRUD\\Asp.NetCoreMVCCRUD.project\\obj\\",
+      "outputPath": "C:\\Users\\sagar\\Desktop\\DotNetCoreMVCCRUD-WebApp\\DotNetCore_MVC project\\Asp.NetCoreMVCCRUD\\Asp.NetCoreMVCCRUD.project\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\sagar\\AppData\\Roaming\\NuGet\\NuGet.Config",
